@@ -26,7 +26,7 @@ jobs:
 
       - name: calculate version
         id: calculate-version
-        uses: bitshifted/git-auto-semver@f136eb2d08062ca75e92f2408e1e9ace385c7523 # pin@v1
+        uses: bitshifted/git-auto-semver@b2884bbf8def56698c813550eb1b31a09ef072eb # pin@v1
 
       - name: Set version
         run: 'echo "VERSION_STRING=${{ steps.calculate-version.outputs.version-string }}" >> "$GITHUB_ENV"'
