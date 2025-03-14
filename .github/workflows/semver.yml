@@ -29,6 +29,8 @@ jobs:
       - name: calculate version
         id: calculate-version
         uses: bitshifted/git-auto-semver@f136eb2d08062ca75e92f2408e1e9ace385c7523 # pin@v1
+        with:
+          create_tag: true
 
       - name: Set version
         run: 'echo "VERSION_STRING=${{ steps.calculate-version.outputs.version-string }}" >> "$GITHUB_ENV"'
@@ -47,5 +49,6 @@ jobs:
           token: "${{ secrets.GITHUB_TOKEN }}"
           release_name: "${{ steps.calculate-version.outputs.version-string }}"
           body: "${{ steps.release-notes.outputs.release-notes }}"
+          tag_name: "${{ steps.calculate-version.outputs.version-string }}"
           draft: false
           prerelease: false
