@@ -106,8 +106,10 @@ jobs:
         with:
           files: "megalinter-reports/megalinter-report.sarif"
 
+      # only attempt to upload the SARIF file if it exists and if the
+      # repository is public (private / internal repos likely don't have GHAS)
       - name: Upload MegaLinter scan results to GitHub Security tab
-        if: steps.sarif_file_exists.outputs.files_exists == 'true'
+        if: steps.sarif_file_exists.outputs.files_exists == 'true' && github.event.repository.visibility == 'public'
         uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5 # pin@v3.28.11
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
