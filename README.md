@@ -32,6 +32,24 @@ variables are used to sign the commits that MegaLinter creates when
 If the MegaLinter action is disabled, none of these environment variables are
 required.
 
+### Conventional Commits
+
+This project uses Conventional Commits. Conventional Commits is a specification
+for adding human and machine readable meaning to commit messages. It is a
+lightweight convention on top of commit messages. The specification can be
+found at [conventionalcommits.org](https://www.conventionalcommits.org/).
+
+Specifically, this project uses the
+[bitshifted/git-auto-semver](https://github.com/bitshifted/git-auto-semver)
+action to automatically increment the version number based on the commit
+messages:
+
+
+- `build`, `chore`. `ci`, `docs`, `fix`, `perf`, `refactor`, `revert`,
+  `style`, `test`: bump micro (patch) number
+- `feat`: bump minor version number
+- `BREAKING CHANGE`: bump major version number
+
 ## License
 
 This project is licensed under the Creative Commons License 1.0 Universal
