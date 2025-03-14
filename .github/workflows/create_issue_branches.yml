@@ -1,0 +1,26 @@
+---
+# yamllint disable-line rule:truthy
+on:
+  issues:
+    types: [opened, assigned]
+  issue_comment:
+    types: [created]
+  # The pull_request events below are only needed for pull-request related features.
+  pull_request:
+    types: [opened, closed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  create_issue_branch_job:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Create Issue Branch
+        uses: robvanderleek/create-issue-branch@95b576a5988800837c36636f5b9500f864b78cd6 # pin@v1.8.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
