@@ -45,7 +45,7 @@ action to automatically increment the version number based on the commit
 messages:
 
 
-- `build`, `chore`. `ci`, `docs`, `fix`, `perf`, `refactor`, `revert`,
+- `build`, `chore`, `ci`, `docs`, `fix`, `perf`, `refactor`, `revert`,
   `style`, `test`: bump micro (patch) number
 - `feat`: bump minor version number
 - `BREAKING CHANGE`: bump major version number
