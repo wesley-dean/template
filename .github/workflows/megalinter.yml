@@ -3,56 +3,107 @@ name: MegaLinter
 
 # yamllint disable-line rule:truthy
 on:
-  # Triggers mega-linter when a pull_request event's activity type is opened, synchronize, or reopened by default.
+  # MegaLinter can be triggered by one or more of the following events:
+  #
+  #   pull_request: triggers MegaLinter when there is activity Pull Request (PR)
+  #   push: triggers MegaLinter when there is a push to the repository
+  #   workflow_dispatch: triggers MegaLinter when manually triggered
+  #   schedule: triggers MegaLinter on a schedule
+  #
+  # Note: running MegaLinter on every push is not recommended if you're payinh
+  # for GitHub Actions, as it will consume your minutes quickly.
   pull_request:
     branches:
       - main
+      - master
   workflow_dispatch:
 
+# Set the top-level permissions to read-only to avoid accidental changes
 permissions:
   contents: read
 
 env:
-  # Comment env block if you do not want to apply fixes
-  # Apply linter fixes configuration
-  APPLY_FIXES: all # When active, APPLY_FIXES must also be defined as environment variable (in github/workflows/mega-linter.yml or other CI tool)
-  APPLY_FIXES_EVENT: pull_request # Decide which event triggers application of fixes in a commit or a PR (pull_request, push, all)
-  APPLY_FIXES_MODE: commit # If APPLY_FIXES is used, defines if the fixes are directly committed (commit) or posted in a PR (pull_request)
+  # When active, APPLY_FIXES must be defined as an environment variable; it
+  # cannot be defined in the MegaLinter configuration file.  APPLY_FIXES may
+  # be set to one of the following values:
+  #
+  #  all: apply all fixes
+  #  none: apply no fixes
+  APPLY_FIXES: all
+
+  # Decide which events trigger application of fixes in a commit or PR:
+  #
+  #   pull_request: triggers MegaLinter when there is activity in a Pull Request
+  #   push: triggers MegaLinter when there is a push to the repository
+  #   all: triggers MegaLinter on all events
+  APPLY_FIXES_EVENT: pull_request
+
+  # Decide how fixes are applied:
+  #
+  #  commit: applies fixes in a new commit
+  #  pull_request: applies fixes in a new Pull Request
+  APPLY_FIXES_MODE: commit
+
+  # If using signed commits, uncomment the following lines:
   GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
   GPG_PRIVATE_KEY_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
 
+# If MegaLinter is already running, cancel the previous run
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  megalinter:
     name: MegaLinter
-    runs-on: ubuntu-22.04
-    permissions: write-all
-    env:
-      GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-      GPG_PRIVATE_KEY_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+    runs-on: ubuntu-24.04
+
+    # Give the default GITHUB_TOKEN write permission to commit and push,
+    # comment on issues and post new PRs.  Remove the ones you do not need.
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      security-events: write
+      checks: write
+
     steps:
-      # Git Checkout
+      # Checkout the code
       - name: Checkout Code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN || github.token }}
-          fetch-depth: 1
+          fetch-depth: 0
 
-      # MegaLinter
+      # Run MegaLinter
       - name: MegaLinter
         id: ml
         uses: oxsecurity/megalinter/flavors/security@ec124f7998718d79379a3c5b39f5359952baf21d # pin@v8.4.2
         env:
-          VALIDATE_ALL_CODEBASE: false
           GITHUB_TOKEN: ${{ secrets.PAT || secrets.GITHUB_TOKEN || github.token }}
 
+      # This will import the GPG key if the MegaLinter has updated the sources
+      # with Crazy Max's ghaction-import-gpg action.  This is necessary to sign
+      # commits with a GPG key.  The GPG key must be added to the repository
+      # as secrets. GPG_PRIVATE_KEY is the **private key** and
+      # GPG_PRIVATE_KEY_PASSPHRASE is the passphrase for the private key.
+      #
+      # For more information, see:
+      #   https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+      #   https://github.com/crazy-max/ghaction-import-gpg
+      #
+      # If using signed commits, uncomment the following step:
       - name: "Import GPG key"
         id: import-gpg
         uses: crazy-max/ghaction-import-gpg@cb9bde2e2525e640591a934b1fd28eef1dcaf5e5 # pin@v6
-        if: steps.ml.outputs.has_updated_sources == 1 && (env.APPLY_FIXES_EVENT == 'all' || env.APPLY_FIXES_EVENT == github.event_name) && env.APPLY_FIXES_MODE == 'commit' && github.ref != 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+        if: |
+          steps.ml.outputs.has_updated_sources == 1
+          && (env.APPLY_FIXES_EVENT == 'all'
+            || env.APPLY_FIXES_EVENT == github.event_name)
+          && env.APPLY_FIXES_MODE == 'commit'
+          && github.ref != 'refs/heads/main'
+          && (github.event_name == 'push'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         with:
           gpg_private_key: ${{ env.GPG_PRIVATE_KEY }}
           passphrase: ${{ env.GPG_PRIVATE_KEY_PASSPHRASE }}
@@ -69,18 +120,36 @@ jobs:
             megalinter-reports
             megalinter-reports/megalinter.log
 
-      # Create pull request if applicable (for now works only on PR from same repository, not from forks)
+      # Create pull request with applied fixes if APPLY_FIXES is set and there
+      # are changes, and we're using pull_request mode to add the changes to a
+      # new branch.  This step only works on PRs from same repository, not
+      # from forks
       - name: Create Pull Request with applied fixes
         id: cpr
-        if: steps.ml.outputs.has_updated_sources == 1 && (env.APPLY_FIXES_EVENT == 'all' || env.APPLY_FIXES_EVENT == github.event_name) && env.APPLY_FIXES_MODE == 'pull_request' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+        if: |
+          steps.ml.outputs.has_updated_sources == 1
+          && (env.APPLY_FIXES_EVENT == 'all'
+            || env.APPLY_FIXES_EVENT == github.event_name)
+          && env.APPLY_FIXES_MODE == 'pull_request'
+          && (github.event_name == 'push'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         uses: peter-evans/create-pull-request@4e1beaa7521e8b457b572c090b25bd3db56bf1c5 # pin@v5
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
-          commit-message: "[MegaLinter] Apply linters automatic fixes"
-          title: "[MegaLinter] Apply linters automatic fixes"
+          commit-message: "[MegaLinter] Apply linter automatic fixes"
+          title: "[MegaLinter] Apply linter automatic fixes"
           labels: bot
+
+      # Output the PR number and URL
       - name: Create PR output
-        if: steps.ml.outputs.has_updated_sources == 1 && (env.APPLY_FIXES_EVENT == 'all' || env.APPLY_FIXES_EVENT == github.event_name) && env.APPLY_FIXES_MODE == 'pull_request' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+        id: pr-output
+        if: |
+          steps.ml.outputs.has_updated_sources == 1
+          && (env.APPLY_FIXES_EVENT == 'all'
+            || env.APPLY_FIXES_EVENT == github.event_name)
+          && env.APPLY_FIXES_MODE == 'pull_request'
+          && (github.event_name == 'push'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         env:
           pull_request_number: ${{ steps.cpr.outputs.pull-request-number }}
           pull_request_urlL: ${{ steps.cpr.outputs.pull-request-url }}
@@ -88,31 +157,69 @@ jobs:
           echo "Pull Request Number - ${pull_request_number}"
           echo "Pull Request URL - ${pull-request-url}"
 
-      # Push new commit if applicable (for now works only on PR from same repository, not from forks)
+      # Prepare commit if APPLY_FIXES is set, there are changes, and we're
+      # using commit mode to add the changes to the current branch.  This step
+      # is necessary to change the ownership of the .git directory to the
+      # current user.
+      #
+      # This works only on PRs from same repository, not from forks
       - name: Prepare commit
-        if: steps.ml.outputs.has_updated_sources == 1 && (env.APPLY_FIXES_EVENT == 'all' || env.APPLY_FIXES_EVENT == github.event_name) && env.APPLY_FIXES_MODE == 'commit' && github.ref != 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+        id: prepare-commit
+        if: |
+          steps.ml.outputs.has_updated_sources == 1
+          && (env.APPLY_FIXES_EVENT == 'all'
+            || env.APPLY_FIXES_EVENT == github.event_name)
+          && env.APPLY_FIXES_MODE == 'commit'
+          && github.ref != 'refs/heads/main'
+          && (github.event_name == 'push'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         run: sudo chown -Rc $UID .git/
 
+        # Commit and push the changes if APPLY_FIXES is set, there are changes,
+        # and we're using commit mode to add the changes to the current branch.
       - name: Commit and push applied linter fixes
-        if: steps.ml.outputs.has_updated_sources == 1 && (env.APPLY_FIXES_EVENT == 'all' || env.APPLY_FIXES_EVENT == github.event_name) && env.APPLY_FIXES_MODE == 'commit' && github.ref != 'refs/heads/main' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository)
+        id: create-commit
+        if: |
+          steps.ml.outputs.has_updated_sources == 1
+          && (env.APPLY_FIXES_EVENT == 'all'
+            || env.APPLY_FIXES_EVENT == github.event_name)
+          && env.APPLY_FIXES_MODE == 'commit'
+          && github.ref != 'refs/heads/main'
+          && (github.event_name == 'push'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # pin@v5
         with:
           branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
-          commit_message: "[MegaLinter] Apply linters fixes"
+          commit_message: "[MegaLinter] Apply linter fixes"
+
+          # If using signed commits, comment the following lines:
+          # commit_user_name: megalinter-bot
+          # commit_user_email: 129584137+megalinter-bot@users.noreply.github.com
+
+          # If using signed commits, uncomment the following lines:
           commit_author: "${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>"
           commit_user_name: ${{ steps.import-gpg.outputs.name }}
           commit_user_email: ${{ steps.import-gpg.outputs.email }}
 
+      # Check to see if the SARIF file was generated; if there is no SARIF file,
+      # the upload-sarif step will fail, so we need to check for its existence
+      # first.
       - name: Check to see if the SARIF a was generated
         id: sarif_file_exists
         uses: andstor/file-existence-action@076e0072799f4942c8bc574a82233e1e4d13e9d6 # pin@v3.0.0
         with:
           files: "megalinter-reports/megalinter-report.sarif"
 
-      # only attempt to upload the SARIF file if it exists and if the
-      # repository is public (private / internal repos likely don't have GHAS)
+      # Cnly attempt to upload the SARIF file if it exists and if the
+      # repository is public (private / internal repos likely don't have GitHub
+      # Advanced Security (GHAS).  If the repository is private or internal and
+      # GHAS is enabled, comment out the `github.event.repository.visibility`
+      # condition.
       - name: Upload MegaLinter scan results to GitHub Security tab
-        if: steps.sarif_file_exists.outputs.files_exists == 'true' && github.event.repository.visibility == 'public'
+        id: upload-sarif
+        if: |
+          steps.sarif_file_exists.outputs.files_exists == 'true'
+          && github.event.repository.visibility == 'public'
         uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5 # pin@v3.28.11
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
