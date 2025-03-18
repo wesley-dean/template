@@ -210,7 +210,7 @@ jobs:
         with:
           files: "megalinter-reports/megalinter-report.sarif"
 
-      # Cnly attempt to upload the SARIF file if it exists and if the
+      # Only attempt to upload the SARIF file if it exists and if the
       # repository is public (private / internal repos likely don't have GitHub
       # Advanced Security (GHAS).  If the repository is private or internal and
       # GHAS is enabled, comment out the `github.event.repository.visibility`
