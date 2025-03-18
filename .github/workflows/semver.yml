@@ -31,6 +31,7 @@ jobs:
         uses: bitshifted/git-auto-semver@b2884bbf8def56698c813550eb1b31a09ef072eb # pin@v1
         with:
           create_tag: true
+          initial_version: 0.0.1
 
       - name: Set version
         run: 'echo "VERSION_STRING=${{ steps.calculate-version.outputs.version-string }}" >> "$GITHUB_ENV"'
