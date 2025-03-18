@@ -140,6 +140,12 @@ jobs:
           title: "[MegaLinter] Apply linter automatic fixes"
           labels: bot
 
+          # If using signed commits, comment the following lines:
+          # committer: megalinter-bot <129584137+megalinter-bot@users.noreply.github.com>
+
+          # If using signed commits, uncomment the following lines:
+          committer: "${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>"
+
       # Output the PR number and URL
       - name: Create PR output
         id: pr-output
