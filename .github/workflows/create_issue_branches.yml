@@ -21,6 +21,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Create Issue Branch
-        uses: robvanderleek/create-issue-branch@95b576a5988800837c36636f5b9500f864b78cd6 # pin@v1.8.1
+        uses: robvanderleek/create-issue-branch@dfe19372d9a9198999c0fd8a81f0dbe00951afd9 # pin@v1.9.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
