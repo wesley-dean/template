@@ -95,7 +95,7 @@ jobs:
       # If using signed commits, uncomment the following step:
       - name: "Import GPG key"
         id: import-gpg
-        uses: crazy-max/ghaction-import-gpg@cb9bde2e2525e640591a934b1fd28eef1dcaf5e5 # pin@v6
+        uses: crazy-max/ghaction-import-gpg@e89d40939c28e39f97cf32126055eeae86ba74ec # pin@v6
         if: |
           steps.ml.outputs.has_updated_sources == 1
           && (env.APPLY_FIXES_EVENT == 'all'
@@ -228,6 +228,6 @@ jobs:
         if: |
           steps.sarif_file_exists.outputs.files_exists == 'true'
           && github.event.repository.visibility == 'public'
-        uses: github/codeql-action/upload-sarif@5f8171a638ada777af81d42b55959a643bb29017 # pin@v3.28.12
+        uses: github/codeql-action/upload-sarif@1b549b9259bda1cb5ddde3b41741a82a2d15a841 # pin@v3.28.13
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
