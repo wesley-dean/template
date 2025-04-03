@@ -23,7 +23,7 @@ concurrency:
 jobs:
   create_issue_branch_job:
     runs-on: ubuntu-22.04
-    env:
+    permissions:
       contents: write
       issues: write
       pull-requests: write
