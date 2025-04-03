@@ -2,12 +2,16 @@
 # yamllint disable-line rule:truthy
 on:
   issues:
-    types: [opened, assigned]
+    types:
+      - opened
+      - assigned
   issue_comment:
-    types: [created]
-  # The pull_request events below are only needed for pull-request related features.
+    types:
+      - created
   pull_request:
-    types: [opened, closed]
+    types:
+      - opened
+      - closed
 name: "Create issue branches"
 permissions:
   contents: read
