@@ -1,4 +1,5 @@
 ---
+mode: immediate
 autoLinkIssue: true
 autoCloseIssue: true
 autoDeleteBranch: true
