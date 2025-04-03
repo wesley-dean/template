@@ -32,14 +32,14 @@ jobs:
         with:
           create_tag: true
           initial_version: 0.0.1
+          tag_prefix: v
 
       - name: Set version
         env:
           version_string: ${{ steps.calculate-version.outputs.version-string }}
         run: |
           (
-            echo "VERSION_STRING=v${version-string}"
-            echo "VERSION_NUMBER=${version-string}"          
+            echo "VERSION_STRING=${version-string}"            
           ) >> "$GITHUB_ENV"
 
       - name: Generate release notes
