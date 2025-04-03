@@ -33,20 +33,12 @@ jobs:
           create_tag: true
           initial_version: 0.0.1
           tag_prefix: v
-
-      - name: Set version
-        env:
-          version_string: ${{ steps.calculate-version.outputs.version-string }}
-        run: |
-          (
-            echo "VERSION_STRING=${version-string}"            
-          ) >> "$GITHUB_ENV"
-
+      
       - name: Generate release notes
         id: release-notes
         uses: RedCrafter07/release-notes-action@31674bfa3a219e7c661fc0c5b7b3851c741b9965 # pin@v1.0.1
         with:
-          tag-name: "${{ steps.calculate-version.outputs.version-string }}"
+          tag-name: "v${{ steps.calculate-version.outputs.version-string }}"
           token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Create release
@@ -54,8 +46,8 @@ jobs:
         uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # pin@v2.2.1
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
-          name: "${{ steps.calculate-version.outputs.version-string }}"
+          name: "v${{ steps.calculate-version.outputs.version-string }}"
           body: "${{ steps.release-notes.outputs.release-notes }}"
-          tag_name: "${{ steps.calculate-version.outputs.version-string }}"
+          tag_name: "v${{ steps.calculate-version.outputs.version-string }}"
           draft: false
           prerelease: false
