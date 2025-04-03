@@ -5,4 +5,3 @@ autoCloseIssue: true
 autoDeleteBranch: true
 openDraftPR: true
 conventionalPrTitles: true
-branchName: '${issue.number}-${issue.title}'
