@@ -24,3 +24,9 @@ jobs:
         uses: robvanderleek/create-issue-branch@dfe19372d9a9198999c0fd8a81f0dbe00951afd9 # pin@v1.9.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          autoLinkIssue: true
+          autoCloseIssue: true
+          autoDeleteBranch: true
+          openDraftPR: true
+          conventionalPrTitles: true
