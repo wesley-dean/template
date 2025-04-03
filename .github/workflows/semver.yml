@@ -36,7 +36,11 @@ jobs:
       - name: Set version
         env:
           version_string: ${{ steps.calculate-version.outputs.version-string }}
-        run: 'echo "VERSION_STRING=${version-string}" >> "$GITHUB_ENV"'
+        run: |
+          (
+            echo "VERSION_STRING=v${version-string}"
+            echo "VERSION_NUMBER=${version-string}"          
+          ) >> "$GITHUB_ENV"
 
       - name: Generate release notes
         id: release-notes
