@@ -10,7 +10,7 @@ on:
   #   workflow_dispatch: triggers MegaLinter when manually triggered
   #   schedule: triggers MegaLinter on a schedule
   #
-  # Note: running MegaLinter on every push is not recommended if you're payinh
+  # Note: running MegaLinter on every push is not recommended if you're paying
   # for GitHub Actions, as it will consume your minutes quickly.
   pull_request:
     branches:
