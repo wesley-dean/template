@@ -33,7 +33,7 @@ jobs:
           create_tag: true
           initial_version: 0.0.1
           tag_prefix: v
-      
+
       - name: Generate release notes
         id: release-notes
         uses: RedCrafter07/release-notes-action@31674bfa3a219e7c661fc0c5b7b3851c741b9965 # pin@v1.0.1

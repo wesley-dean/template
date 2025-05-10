@@ -1,13 +1,12 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ''
+title: ""
 labels: enhancement
-assignees: ''
-
+assignees: ""
 ---
 
-## Is your feature request related to a problem? Please describe.
+## Is your feature request related to a problem? Please describe it
 
 <!-- Please provide a clear and concise description of the problem. -->
 
