@@ -2,7 +2,6 @@ root = true
 
 [*]
 indent_style = space
-indent_size = 2
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
@@ -11,9 +10,49 @@ curly_bracket_next_line =false
 spaces_around_operators = true
 indent_brace_style = K&R
 
-[*.py]
+[{.,}*.{js{,*},y{a,}ml}]
+indent_size = 2
+
+# Bash Scripts
+[{.,}*.{sh,bash}]
 indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Python Files
+[{.,}*.{py,pyw}]
 indent_size = 4
 
-[Makefile]
+# Markdown Files
+[{.,}*.{md,markdown}]
+indent_size = 2
+trim_trailing_whitespace = false
+trim_final_newline = false
+
+# Makefiles
+[{.,}*.{mk,makefile,Makefile}]
 indent_style = tab
+
+# XML Configuration Files
+[{.,}**.{xml,config,props,targets,nuspec,resx,ruleset,vsixmanifest,vsct}]
+indent_size = 2
+
+# JSON Files
+[{.,}*.{json,json5,webmanifest}]
+indent_size = 2
+
+# YAML Files
+[{.,}*.{yaml,yml}]
+
+
+[{*.js,*.json}]
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.js]
+block_comment_start = /**
+block_comment = *
+block_comment_end = */
