@@ -21,14 +21,14 @@ repos:
         files: \.xml$
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.11.0
+    rev: v0.11.9
     hooks:
       - id: ruff
       - id: ruff-format
 
   # Scan for secrets
   - repo: https://github.com/zricethezav/gitleaks
-    rev: v8.24.0
+    rev: v8.25.1
     hooks:
       - id: gitleaks-docker
         name: Detect hardcoded secrets
