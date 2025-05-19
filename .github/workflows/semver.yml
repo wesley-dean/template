@@ -28,7 +28,7 @@ jobs:
 
       - name: calculate version
         id: calculate-version
-        uses: bitshifted/git-auto-semver@56b0b0645acb3a6f2a9229f2b0b28102e6b1739b # pin@v1
+        uses: bitshifted/git-auto-semver@bf1df921f244690998135f7544385f3575693d7e # pin@v1
         with:
           create_tag: true
           initial_version: 0.0.1
