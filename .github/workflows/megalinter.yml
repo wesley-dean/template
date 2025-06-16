@@ -78,7 +78,7 @@ jobs:
       # Run MegaLinter
       - name: MegaLinter
         id: ml
-        uses: oxsecurity/megalinter/flavors/security@5a91fb06c83d0e69fbd23756d47438aa723b4a5a # pin@v8.7.0
+        uses: oxsecurity/megalinter/flavors/security@e08c2b05e3dbc40af4c23f41172ef1e068a7d651 # pin@v8.8.0
         env:
           GITHUB_TOKEN: ${{ secrets.PAT || secrets.GITHUB_TOKEN || github.token }}
 
@@ -228,6 +228,6 @@ jobs:
         if: |
           steps.sarif_file_exists.outputs.files_exists == 'true'
           && github.event.repository.visibility == 'public'
-        uses: github/codeql-action/upload-sarif@fca7ace96b7d713c7035871441bd52efbe39e27e # pin@v3.28.19
+        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # pin@v3.29.0
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
