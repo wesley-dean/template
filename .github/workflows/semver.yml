@@ -28,7 +28,7 @@ jobs:
 
       - name: calculate version
         id: calculate-version
-        uses: bitshifted/git-auto-semver@bf1df921f244690998135f7544385f3575693d7e # pin@v1
+        uses: bitshifted/git-auto-semver@29951ab6c607ad8b2ff7495f83bd5174cd5381b1 # pin@v1
         with:
           create_tag: true
           initial_version: 0.0.1
@@ -43,7 +43,7 @@ jobs:
 
       - name: Create release
         id: create-release
-        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # pin@v2.2.2
+        uses: softprops/action-gh-release@72f2c25fcb47643c292f7107632f7a47c1df5cd8 # pin@v2.3.2
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           name: "v${{ steps.calculate-version.outputs.version-string }}"
