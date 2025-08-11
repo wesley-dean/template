@@ -228,6 +228,6 @@ jobs:
         if: |
           steps.sarif_file_exists.outputs.files_exists == 'true'
           && github.event.repository.visibility == 'public'
-        uses: github/codeql-action/upload-sarif@51f77329afa6477de8c49fc9c7046c15b9a4e79d # pin@v3.29.5
+        uses: github/codeql-action/upload-sarif@76621b61decf072c1cee8dd1ce2d2a82d33c17ed # pin@v3.29.5
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
