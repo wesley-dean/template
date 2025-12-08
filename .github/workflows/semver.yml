@@ -21,14 +21,14 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # pin@v4
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # pin@v4
         with:
           fetch-depth: 0
           fetch-tags: true
 
       - name: calculate version
         id: calculate-version
-        uses: bitshifted/git-auto-semver@76f68b35706881aead71cffabf3f4869ce800d8e # pin@v1
+        uses: bitshifted/git-auto-semver@b357dcedaf9af5b86edc973319bec187f2d205a7 # pin@v1
         with:
           create_tag: true
           initial_version: 0.0.1
@@ -43,7 +43,7 @@ jobs:
 
       - name: Create release
         id: create-release
-        uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # pin@v2.4.2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # pin@v2.5.0
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           name: "v${{ steps.calculate-version.outputs.version-string }}"
