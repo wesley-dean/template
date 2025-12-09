@@ -70,7 +70,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout Code
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # pin@v4
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # pin@v4
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN || github.token }}
           fetch-depth: 0
@@ -78,7 +78,7 @@ jobs:
       # Run MegaLinter
       - name: MegaLinter
         id: ml
-        uses: oxsecurity/megalinter/flavors/security@62c799d895af9bcbca5eacfebca29d527f125a57 # pin@v9.1.0
+        uses: oxsecurity/megalinter/flavors/security@55a59b24a441e0e1943080d4a512d827710d4a9d # pin@v9.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.PAT || secrets.GITHUB_TOKEN || github.token }}
 
@@ -133,7 +133,7 @@ jobs:
           && env.APPLY_FIXES_MODE == 'pull_request'
           && (github.event_name == 'push'
             || github.event.pull_request.head.repo.full_name == github.repository)
-        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # pin@v5
+        uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # pin@v5
         with:
           token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
           commit-message: "[MegaLinter] Apply linter automatic fixes"
@@ -228,6 +228,6 @@ jobs:
         if: |
           steps.sarif_file_exists.outputs.files_exists == 'true'
           && github.event.repository.visibility == 'public'
-        uses: github/codeql-action/upload-sarif@e12f0178983d466f2f6028f5cc7a6d786fd97f4b # pin@v3.29.5
+        uses: github/codeql-action/upload-sarif@cf1bb45a277cb3c205638b2cd5c984db1c46a412 # pin@v3.29.5
         with:
           sarif_file: "megalinter-reports/megalinter-report.sarif"
