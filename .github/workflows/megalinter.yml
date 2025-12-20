@@ -66,6 +66,7 @@ jobs:
       pull-requests: write
       security-events: write
       checks: write
+      workflows: write
 
     steps:
       # Checkout the code
