@@ -1,5 +1,29 @@
 # NUMBER. TITLE
 
+<!--
+This is a template for drafting Architectural Decision Records (ADRs).  It
+may be used and consumed by humans as well as AI/LLM-based tooling.
+
+There are placeholders used in this template:
+- NUMBER: the ADR's number
+- TITLE: the title of the ADR
+- DATE: the date the ADR was drafted (YYYY-MM-DD format)
+- STATUS: the status of the ADR (Accepted, Proposed, etc.)
+
+Replace the placeholders when drafting the ADR before committing it.
+
+This template is compatible with Nat Pryce's ADR tools found at:
+
+https://github.com/npryce/adr-tools/tree/master
+
+If you want to use this template with adr-tools, place it in your repository
+at:
+
+doc/adr/templates/template.md
+
+Creating a new ADR with adr-tools can then be accomplished with `adr new`.
+-->
+
 Date: DATE
 
 <!--
@@ -11,9 +35,10 @@ This is the date that the ADR was drafted written in YYYY-MM-DD format.
 STATUS
 
 <!--
-Specify the current status of this Architectural Decision Record (ADR).  It
-is often safe to assume "accepted" here when this ADR is used in a Source Code
-Management (SCM) system as the review process resulting in the ADR being
+Specify the current status of this ADR.
+
+It is often safe to assume "accepted" here when this ADR is used in a Source
+Code Management (SCM) system as the review process resulting in the ADR being
 added to the repository may represent the acceptance of the ADR.  Your team
 may use different rules or conventions, so update this template as-needed
 -->
