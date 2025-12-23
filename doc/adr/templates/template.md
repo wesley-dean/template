@@ -1,10 +1,10 @@
-# <ADR Title>
+# NUMBER. TITLE
 
-Date: <YYYY-MM-DD>
+Date: DATE
 
 ## Status
 
-<Proposed | Accepted | Deprecated | Superseded>
+STATUS
 
 ## Intent and Documentation Posture
 
