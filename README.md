@@ -50,6 +50,23 @@ messages:
 - `feat`: bump minor version number
 - `BREAKING CHANGE`: bump major version number
 
+## Documentation
+
+### Architecture Decision Records (ADRs)
+
+This project is configured to use [Nat Pryce's](https://github.com/npryce)
+[adr-tools](https://github.com/npryce/adr-tools) project.  There is a template
+at `doc/adrs/templates/template.md` which can be edited at-will.  The ADR
+template is built to support both human and machine (AI/LLM)-produced and
+maintained ADRs.  The configuration file, `.adr-dir` resides at the root of
+the project and may be updated if ADRs are to be stored in an alternate
+directory.
+
+For more information about ADRs, check out
+[Michael Nygard](https://cognitect.com/authors/MichaelNygard.html)'s
+[article](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions)
+on the topic.
+
 ## License
 
 This project is licensed under the Creative Commons License 1.0 Universal
