@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - language: python # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
+          - language: actions # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
             build-mode: none
     steps:
       - name: Checkout repository
