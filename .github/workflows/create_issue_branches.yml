@@ -16,10 +16,6 @@ name: "Create issue branches"
 permissions:
   contents: read
 
-concurrency:
-  group: ${{ github.ref }}-${{ github.workflow }}
-  cancel-in-progress: true
-
 jobs:
   create_issue_branch_job:
     runs-on: ubuntu-22.04
