@@ -8,6 +8,7 @@ IGNORE_GITIGNORED_FILES: true
 # Disable several linters:
 #  - devskim: it's reporting an error with no log message
 #  - dustilock: it can't parse requirements.txt files with long lines (hashes)
+#  - osv-scanner: fails in repos without lockfiles
 #  - proselint: it may or may not be helpful, especially for POC work
 #  - copypaste_jscpd: it's a little touchy and may not be helpful
 #  - bash-exec: some .bash files don't need to be executable
@@ -16,6 +17,7 @@ DISABLE_LINTERS:
   [
     REPOSITORY_DEVSKIM,
     REPOSITORY_DUSTILOCK,
+    REPOSITORY_OSV_SCANNER,
     SPELL_PROSELINT,
     COPYPASTE_JSCPD,
     BASH_EXEC,
