@@ -44,10 +44,6 @@ env:
   #  pull_request: applies fixes in a new Pull Request
   APPLY_FIXES_MODE: commit
 
-  # If using signed commits, uncomment the following lines:
-  GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-  GPG_PRIVATE_KEY_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
-
 # If MegaLinter is already running, cancel the previous run
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
@@ -96,6 +92,11 @@ jobs:
       - name: "Import GPG key"
         id: import-gpg
         uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # pin@v7.0.0
+        env:
+          # If using signed commits, uncomment the following lines:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PRIVATE_KEY_PASSPHRASE: ${{ secrets.GPG_PRIVATE_KEY_PASSPHRASE }}
+
         if: |
           steps.ml.outputs.has_updated_sources == 1
           && (env.APPLY_FIXES_EVENT == 'all'
