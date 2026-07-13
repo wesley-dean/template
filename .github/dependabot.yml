@@ -2,6 +2,19 @@
 # package ecosystems to update and where the package manifests are located.
 # Please see the documentation for all configuration options:
 # https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+#
+# Package ecosystems include:
+#
+#   - docker
+#   - docker-compose
+#   - github-actions
+#   - gitsubmodules
+#   - npm (npm, pnpm, yarn)
+#   - pip (pip, pip-compile, pipenv, poetry)
+#   - pre-commit
+#   - terraform
+# A fill list is here:
+# https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference#package-ecosystem-
 ---
 version: 2
 updates:
@@ -9,6 +22,8 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 7  # Wait 7 days before creating PRs
     commit-message:
       prefix: fix
       prefix-development: chore
