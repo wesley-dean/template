@@ -36,14 +36,14 @@ jobs:
 
       - name: Generate release notes
         id: release-notes
-        uses: RedCrafter07/release-notes-action@31674bfa3a219e7c661fc0c5b7b3851c741b9965 # pin@v1.0.1
+        uses: RedCrafter07/release-notes-action@304edb57ff4d0cb822b39a00556c015790dee977 # pin@v1.0.2
         with:
           tag-name: "v${{ steps.calculate-version.outputs.version-string }}"
           token: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Create release
         id: create-release
-        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # pin@v3.0.2
+        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # pin@v3.0.3
         with:
           token: "${{ secrets.GITHUB_TOKEN }}"
           name: "v${{ steps.calculate-version.outputs.version-string }}"
